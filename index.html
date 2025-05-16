@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentiCollab - Emotional Learning Companion</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">SentiCollab</div>
+            <div class="user-info">
+                <span id="userFullname">Loading...</span>
+                <button onclick="logout()">Logout</button>
+            </div>
+            <nav>
+                <a href="#" class="nav-item active" data-page="dashboard" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-page="input" onclick="showSection('input')">
+                    <i class="fas fa-plus-circle"></i> Input Emosi
+                </a>
+                <a href="#" class="nav-item" data-page="history" onclick="showSection('history')">
+                    <i class="fas fa-history"></i> Riwayat Emosi
+                </a>
+                <a href="#" class="nav-item" data-page="statistics" onclick="showSection('statistics')">
+                    <i class="fas fa-chart-bar"></i> Statistik
+                </a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page active">
+                <h1>Dashboard</h1>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Total Entri</h3>
+                        <p id="totalEntries">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Emosi Hari Ini</h3>
+                        <p id="todayMood">-</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="dailyEmotionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Input Emotion Page -->
+            <section id="input" class="page">
+                <h1>Input Emosi</h1>
+                <div class="camera-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" class="hidden"></canvas>
+                </div>
+                <div class="emotion-status">
+                    <h3>Emosi Terdeteksi:</h3>
+                    <div id="detectedEmotion">Menunggu...</div>
+                    <div class="intensity-container">
+                        <label for="intensity">Intensitas (1-5):</label>
+                        <input type="range" id="intensity" min="1" max="5" value="3" disabled>
+                        <span id="intensityValue">3</span>
+                    </div>
+                </div>
+                <div id="emotionForm" class="emotion-form"></div>
+                <div id="recommendations" class="recommendations hidden"></div>
+            </section>
+
+            <!-- History Page -->
+            <section id="history" class="page">
+                <h1>Riwayat Emosi</h1>
+                <div class="table-container">
+                    <table id="emotionHistory">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Emosi</th>
+                                <th>Intensitas</th>
+                                <th>Catatan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Statistics Page -->
+            <section id="statistics" class="page">
+                <h1>Statistik Emosi</h1>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <canvas id="emotionDistribution"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="intensityTrend"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        } else {
+            const user = JSON.parse(currentUser);
+            document.getElementById('userFullname').textContent = user.fullname;
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</body>
+</html>
